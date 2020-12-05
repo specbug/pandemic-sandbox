@@ -28,18 +28,18 @@ state_dict = {
 }
 
 outbreak_start_date = '2020-01-01'
-population_rt = 100 # population = population_rt**2
+population_rt = 130 # population = population_rt**2
 population = population_rt**2
-r_naught = 5.4 # transmission factor
-fataity_rate = 0.03 # probability of death (post infection)
-hospital_capacity = 0.5*population # as a percentage of the population
-self_quarantine_rate = 0.25 # percentage (susceptible) population self quarantined
-self_quarantine_strictness = 0.6
-self_quarantine_start_buffer = 0.1*population # percentage symptomatic population after which self quarantine starts
-encounters_per_day = 3 # avg encounters per day
-travel_radius = 30 # as percentage of units of the world (1 unit = 1 square)
+r_naught = 1.9 # transmission factor
+fataity_rate = 0.002 # probability of death (post infection)
+hospital_capacity = 0.2*population # as a percentage of the population
+self_quarantine_rate = 0.3 # percentage (susceptible) population self quarantined
+self_quarantine_strictness = 0.7
+self_quarantine_start_buffer = 0.2*population # percentage symptomatic population after which self quarantine starts
+encounters_per_day = 2 # avg encounters per day
+travel_radius = 23 # as percentage of units of the world (1 unit = 1 square)
 incubation_period = 6 # days with presymptomatic behaviour
-symptomatic_days = 8 # after which a patient either recovers or dies
+symptomatic_days = 4 # after which a patient either recovers or dies
 
 class Human():
     def __init__(self, state, days_exposed, days_sick, quarantine):
@@ -125,7 +125,7 @@ while True:
     if len(list(zip(*np.where(np.isin(np.array([[i.state for i in j] for j in world_grid]), [1, 2]))))) == 0:
         break
     
-    init_date = init_date + pd.offsets.timedelta(days=1)
+    init_date = init_date + pd.offsets.DateOffset(days=1)
     
     for (r, c) in list(zip(*np.where(np.array([[i.state for i in j] for j in world_grid])==2))):
         world_grid[r][c].days_exposed += 1
@@ -176,7 +176,7 @@ while True:
     plot_world_grid(world_grid.copy(), camera)
 
 
-print('Simulation time:', round(T - time(), 2), 's')
+print('Simulation time:', round(time()-T, 2), 's')
 
 logger.fillna(0, inplace=True)
 logger.shape
